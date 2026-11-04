@@ -1,0 +1,182 @@
+{
+  "schema_version": 2,
+  "payload": {
+    "job_id": "ci-reference-rounding",
+    "fixture_id": "rounding",
+    "title": "Discount rounding",
+    "source": "def solve(args):\n    total = sum(item['unit_minor'] * item['quantity'] for item in args['items'])\n    return int(total * (1 - args['discount_bps'] / 10000))\n",
+    "source_sha256": "2ce1a2fc905cf8bb3ca2685420aa443bbec141f706fa305b4cae98107501f937",
+    "created_at": "2026-11-04T23:25:55.615855+00:00",
+    "status": "verified",
+    "evidence_origin": "ci-reference-evaluation",
+    "environment": {
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05"
+    },
+    "candidate": {
+      "code": "from decimal import Decimal, ROUND_HALF_UP\n\ndef solve(args):\n    total = sum(item['unit_minor'] * item['quantity'] for item in args['items'])\n    discounted = Decimal(total) * (Decimal(10000 - args['discount_bps']) / Decimal(10000))\n    return int(discounted.quantize(Decimal('1'), rounding=ROUND_HALF_UP))\n",
+      "sha256": "dc85e5db1ff9381d148ad16ecb871474a9c399341d08e1410044fb620aa2ce01",
+      "explanation": "Disclosed reference repair used to test the sandbox and evaluator; no model was called",
+      "provider": {
+        "name": "reference-fixture",
+        "model": null
+      }
+    },
+    "baseline": {
+      "sandbox_id": "reprolab-d9f7ced98de546949eae61631e66e5aa",
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "nonce": "437e14b9a9d3422e88c71b79ab9d8d72",
+      "policy": {
+        "gvisor": true,
+        "no_network": true,
+        "readonly_root": true,
+        "nonroot": true,
+        "memory_limit": true,
+        "cpu_limit": true,
+        "pid_limit": true,
+        "no_privilege": true,
+        "readonly_work": true,
+        "bounded_tmp": true,
+        "no_docker_logs": true
+      },
+      "policy_verified": true,
+      "source_sha256": "2ce1a2fc905cf8bb3ca2685420aa443bbec141f706fa305b4cae98107501f937",
+      "worker_sha256": "aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f",
+      "exit_code": 0,
+      "stop_reason": null,
+      "elapsed_ms": 290,
+      "stdout_bytes": 970,
+      "stderr_bytes": 0,
+      "stdout_sha256": "c45246f7943342aa1898448f38b2c716b6534a032a324205178079b998163e7a",
+      "stderr_excerpt": "",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05",
+      "oom_killed": false,
+      "teardown": {
+        "confirmed": true,
+        "remove_exit_code": 0,
+        "absence_query_exit_code": 0,
+        "reason": null
+      },
+      "case_count": 20,
+      "inputs_sha256": "8b5c1bb386073be1906bf2e98235fa224253a919b159cabab70d15007f236c4b",
+      "expected_sha256": "10c4fd8cdecd94cafa36bb899029ca8703e0170a637408115ad7a7b0e3fc8caa",
+      "passed": 12,
+      "failed": 8,
+      "valid_protocol": true,
+      "failures": [
+        {
+          "input": {
+            "items": [
+              {
+                "unit_minor": 1,
+                "quantity": 1
+              }
+            ],
+            "discount_bps": 5000
+          },
+          "expected": 1,
+          "actual": 0,
+          "error": null
+        },
+        {
+          "input": {
+            "items": [
+              {
+                "unit_minor": 2026,
+                "quantity": 4
+              },
+              {
+                "unit_minor": 8932,
+                "quantity": 7
+              }
+            ],
+            "discount_bps": 5016
+          },
+          "expected": 35201,
+          "actual": 35200,
+          "error": null
+        },
+        {
+          "input": {
+            "items": [
+              {
+                "unit_minor": 6192,
+                "quantity": 1
+              }
+            ],
+            "discount_bps": 8474
+          },
+          "expected": 945,
+          "actual": 944,
+          "error": null
+        },
+        {
+          "input": {
+            "items": [
+              {
+                "unit_minor": 6055,
+                "quantity": 2
+              }
+            ],
+            "discount_bps": 8427
+          },
+          "expected": 1905,
+          "actual": 1904,
+          "error": null
+        }
+      ],
+      "seed": 61104
+    },
+    "evaluation": {
+      "sandbox_id": "reprolab-209a0a52a2314749b0719472607dfdf5",
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "nonce": "0a6bd6c762c04ae0854d677971fcc08c",
+      "policy": {
+        "gvisor": true,
+        "no_network": true,
+        "readonly_root": true,
+        "nonroot": true,
+        "memory_limit": true,
+        "cpu_limit": true,
+        "pid_limit": true,
+        "no_privilege": true,
+        "readonly_work": true,
+        "bounded_tmp": true,
+        "no_docker_logs": true
+      },
+      "policy_verified": true,
+      "source_sha256": "dc85e5db1ff9381d148ad16ecb871474a9c399341d08e1410044fb620aa2ce01",
+      "worker_sha256": "aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f",
+      "exit_code": 0,
+      "stop_reason": null,
+      "elapsed_ms": 338,
+      "stdout_bytes": 968,
+      "stderr_bytes": 0,
+      "stdout_sha256": "68294659ff1fa8c7a5a6525b325350c8e1e30435527811769f39ee47fa04e1e7",
+      "stderr_excerpt": "",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05",
+      "oom_killed": false,
+      "teardown": {
+        "confirmed": true,
+        "remove_exit_code": 0,
+        "absence_query_exit_code": 0,
+        "reason": null
+      },
+      "case_count": 20,
+      "inputs_sha256": "e81820cadefb1b608540184e393eabb010440b23df2e6b61a82bf32d4f10ab19",
+      "expected_sha256": "962285a184f8df2ce39c1582b84be4be3485a6f25263370a6b522f532b9119ee",
+      "passed": 20,
+      "failed": 0,
+      "valid_protocol": true,
+      "failures": [],
+      "seed": 61105
+    },
+    "attempts": [],
+    "message": "Real sandbox execution of a disclosed reference patch; this is not an autonomous AI run"
+  },
+  "canonical_payload": "{\"attempts\":[],\"baseline\":{\"case_count\":20,\"elapsed_ms\":290,\"exit_code\":0,\"expected_sha256\":\"10c4fd8cdecd94cafa36bb899029ca8703e0170a637408115ad7a7b0e3fc8caa\",\"failed\":8,\"failures\":[{\"actual\":0,\"error\":null,\"expected\":1,\"input\":{\"discount_bps\":5000,\"items\":[{\"quantity\":1,\"unit_minor\":1}]}},{\"actual\":35200,\"error\":null,\"expected\":35201,\"input\":{\"discount_bps\":5016,\"items\":[{\"quantity\":4,\"unit_minor\":2026},{\"quantity\":7,\"unit_minor\":8932}]}},{\"actual\":944,\"error\":null,\"expected\":945,\"input\":{\"discount_bps\":8474,\"items\":[{\"quantity\":1,\"unit_minor\":6192}]}},{\"actual\":1904,\"error\":null,\"expected\":1905,\"input\":{\"discount_bps\":8427,\"items\":[{\"quantity\":2,\"unit_minor\":6055}]}}],\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"inputs_sha256\":\"8b5c1bb386073be1906bf2e98235fa224253a919b159cabab70d15007f236c4b\",\"nonce\":\"437e14b9a9d3422e88c71b79ab9d8d72\",\"oom_killed\":false,\"passed\":12,\"policy\":{\"bounded_tmp\":true,\"cpu_limit\":true,\"gvisor\":true,\"memory_limit\":true,\"no_docker_logs\":true,\"no_network\":true,\"no_privilege\":true,\"nonroot\":true,\"pid_limit\":true,\"readonly_root\":true,\"readonly_work\":true},\"policy_verified\":true,\"runtime\":\"runsc\",\"sandbox_id\":\"reprolab-d9f7ced98de546949eae61631e66e5aa\",\"seed\":61104,\"source_sha256\":\"2ce1a2fc905cf8bb3ca2685420aa443bbec141f706fa305b4cae98107501f937\",\"stderr_bytes\":0,\"stderr_excerpt\":\"\",\"stdout_bytes\":970,\"stdout_sha256\":\"c45246f7943342aa1898448f38b2c716b6534a032a324205178079b998163e7a\",\"stop_reason\":null,\"teardown\":{\"absence_query_exit_code\":0,\"confirmed\":true,\"reason\":null,\"remove_exit_code\":0},\"valid_protocol\":true,\"worker_sha256\":\"aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f\"},\"candidate\":{\"code\":\"from decimal import Decimal, ROUND_HALF_UP\\n\\ndef solve(args):\\n    total = sum(item['unit_minor'] * item['quantity'] for item in args['items'])\\n    discounted = Decimal(total) * (Decimal(10000 - args['discount_bps']) / Decimal(10000))\\n    return int(discounted.quantize(Decimal('1'), rounding=ROUND_HALF_UP))\\n\",\"explanation\":\"Disclosed reference repair used to test the sandbox and evaluator; no model was called\",\"provider\":{\"model\":null,\"name\":\"reference-fixture\"},\"sha256\":\"dc85e5db1ff9381d148ad16ecb871474a9c399341d08e1410044fb620aa2ce01\"},\"created_at\":\"2026-11-04T23:25:55.615855+00:00\",\"environment\":{\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"runtime\":\"runsc\"},\"evaluation\":{\"case_count\":20,\"elapsed_ms\":338,\"exit_code\":0,\"expected_sha256\":\"962285a184f8df2ce39c1582b84be4be3485a6f25263370a6b522f532b9119ee\",\"failed\":0,\"failures\":[],\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"inputs_sha256\":\"e81820cadefb1b608540184e393eabb010440b23df2e6b61a82bf32d4f10ab19\",\"nonce\":\"0a6bd6c762c04ae0854d677971fcc08c\",\"oom_killed\":false,\"passed\":20,\"policy\":{\"bounded_tmp\":true,\"cpu_limit\":true,\"gvisor\":true,\"memory_limit\":true,\"no_docker_logs\":true,\"no_network\":true,\"no_privilege\":true,\"nonroot\":true,\"pid_limit\":true,\"readonly_root\":true,\"readonly_work\":true},\"policy_verified\":true,\"runtime\":\"runsc\",\"sandbox_id\":\"reprolab-209a0a52a2314749b0719472607dfdf5\",\"seed\":61105,\"source_sha256\":\"dc85e5db1ff9381d148ad16ecb871474a9c399341d08e1410044fb620aa2ce01\",\"stderr_bytes\":0,\"stderr_excerpt\":\"\",\"stdout_bytes\":968,\"stdout_sha256\":\"68294659ff1fa8c7a5a6525b325350c8e1e30435527811769f39ee47fa04e1e7\",\"stop_reason\":null,\"teardown\":{\"absence_query_exit_code\":0,\"confirmed\":true,\"reason\":null,\"remove_exit_code\":0},\"valid_protocol\":true,\"worker_sha256\":\"aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f\"},\"evidence_origin\":\"ci-reference-evaluation\",\"fixture_id\":\"rounding\",\"job_id\":\"ci-reference-rounding\",\"message\":\"Real sandbox execution of a disclosed reference patch; this is not an autonomous AI run\",\"source\":\"def solve(args):\\n    total = sum(item['unit_minor'] * item['quantity'] for item in args['items'])\\n    return int(total * (1 - args['discount_bps'] / 10000))\\n\",\"source_sha256\":\"2ce1a2fc905cf8bb3ca2685420aa443bbec141f706fa305b4cae98107501f937\",\"status\":\"verified\",\"title\":\"Discount rounding\"}",
+  "sha256": "ab2ccf884f083a902f7e270857febac5b9a70bab3b87d8d0ae8cb4e2eb4ae4a1"
+}

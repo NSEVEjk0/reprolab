@@ -65,6 +65,6 @@ Passing 20 cases is finite test evidence, not proof for every input. The current
 
 ## Verification status
 
-Ten evaluator, candidate-validation, capability and atomic-admission tests pass locally. The workflow verifies real gVisor execution, containment and browser behavior in an isolated CI runner. A live Vultr host and inference key remain needed for the organizer-specific end-to-end deployment.
+The initial [full verification run](https://github.com/NSEVEjk0/reprolab/actions/runs/41933610664) passed: evaluator/admission tests, real gVisor execution of all three failing originals and reference repairs, containment/timeout/output probes, and desktop/mobile browser verification. The checked example bundles contain those real reference executions. A live Vultr host and inference key remain needed for the organizer-specific end-to-end deployment.
 
 MIT-licensed app. gVisor and the Python image retain their upstream licenses.

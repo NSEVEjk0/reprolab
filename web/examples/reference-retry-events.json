@@ -1,0 +1,270 @@
+{
+  "schema_version": 2,
+  "payload": {
+    "job_id": "ci-reference-retry-events",
+    "fixture_id": "retry-events",
+    "title": "Webhook retries",
+    "source": "def solve(args):\n    return {'total': sum(e['delta'] for e in args['events']), 'duplicates': []}\n",
+    "source_sha256": "1bd5e33835304d1d4a62ce4c4a70032f1fd22f494b42d52212345e4dfb9b54ad",
+    "created_at": "2026-11-04T23:25:56.399800+00:00",
+    "status": "verified",
+    "evidence_origin": "ci-reference-evaluation",
+    "environment": {
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05"
+    },
+    "candidate": {
+      "code": "def solve(args):\n    seen = set()\n    duplicates = []\n    total = 0\n    for event in args['events']:\n        if event['id'] in seen:\n            if event['id'] not in duplicates:\n                duplicates.append(event['id'])\n        else:\n            seen.add(event['id'])\n            total += event['delta']\n    return {'total': total, 'duplicates': duplicates}\n",
+      "sha256": "41e5c96bdee63bb03cc170faca36cd72df588b2ba8b92ae143e3252a3816b694",
+      "explanation": "Disclosed reference repair used to test the sandbox and evaluator; no model was called",
+      "provider": {
+        "name": "reference-fixture",
+        "model": null
+      }
+    },
+    "baseline": {
+      "sandbox_id": "reprolab-49d619145a804b1ea0ab7a71d358d31b",
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "nonce": "75738c3dbb7e4d32b40de8af63d71928",
+      "policy": {
+        "gvisor": true,
+        "no_network": true,
+        "readonly_root": true,
+        "nonroot": true,
+        "memory_limit": true,
+        "cpu_limit": true,
+        "pid_limit": true,
+        "no_privilege": true,
+        "readonly_work": true,
+        "bounded_tmp": true,
+        "no_docker_logs": true
+      },
+      "policy_verified": true,
+      "source_sha256": "1bd5e33835304d1d4a62ce4c4a70032f1fd22f494b42d52212345e4dfb9b54ad",
+      "worker_sha256": "aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f",
+      "exit_code": 0,
+      "stop_reason": null,
+      "elapsed_ms": 344,
+      "stdout_bytes": 1508,
+      "stderr_bytes": 0,
+      "stdout_sha256": "ea8d3e9cdf5896ef32815cd401fa2428ac59d54295966bf52a89726d76a3fcc0",
+      "stderr_excerpt": "",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05",
+      "oom_killed": false,
+      "teardown": {
+        "confirmed": true,
+        "remove_exit_code": 0,
+        "absence_query_exit_code": 0,
+        "reason": null
+      },
+      "case_count": 20,
+      "inputs_sha256": "e49ea273fcf570143c36fbed11f8c2a45ff52129d17f6087f1784a49722bc91a",
+      "expected_sha256": "a9f680712c17e705f03a680dfa6306eae0e2339ededcec85910e31c112b08634",
+      "passed": 7,
+      "failed": 13,
+      "valid_protocol": true,
+      "failures": [
+        {
+          "input": {
+            "events": [
+              {
+                "id": "a",
+                "delta": 7
+              },
+              {
+                "id": "a",
+                "delta": 7
+              }
+            ]
+          },
+          "expected": {
+            "total": 7,
+            "duplicates": [
+              "a"
+            ]
+          },
+          "actual": {
+            "total": 14,
+            "duplicates": []
+          },
+          "error": null
+        },
+        {
+          "input": {
+            "events": [
+              {
+                "id": "x",
+                "delta": 4
+              },
+              {
+                "id": "x",
+                "delta": 99
+              },
+              {
+                "id": "y",
+                "delta": -1
+              }
+            ]
+          },
+          "expected": {
+            "total": 3,
+            "duplicates": [
+              "x"
+            ]
+          },
+          "actual": {
+            "total": 102,
+            "duplicates": []
+          },
+          "error": null
+        },
+        {
+          "input": {
+            "events": [
+              {
+                "id": "1",
+                "delta": -8
+              },
+              {
+                "id": "2",
+                "delta": 8
+              },
+              {
+                "id": "3",
+                "delta": -7
+              },
+              {
+                "id": "4",
+                "delta": 16
+              },
+              {
+                "id": "3",
+                "delta": -8
+              },
+              {
+                "id": "4",
+                "delta": 0
+              },
+              {
+                "id": "1",
+                "delta": -3
+              }
+            ]
+          },
+          "expected": {
+            "total": 9,
+            "duplicates": [
+              "3",
+              "4",
+              "1"
+            ]
+          },
+          "actual": {
+            "total": -2,
+            "duplicates": []
+          },
+          "error": null
+        },
+        {
+          "input": {
+            "events": [
+              {
+                "id": "3",
+                "delta": 1
+              },
+              {
+                "id": "1",
+                "delta": 2
+              },
+              {
+                "id": "1",
+                "delta": 19
+              },
+              {
+                "id": "2",
+                "delta": 1
+              },
+              {
+                "id": "2",
+                "delta": 6
+              },
+              {
+                "id": "2",
+                "delta": 17
+              },
+              {
+                "id": "3",
+                "delta": -2
+              }
+            ]
+          },
+          "expected": {
+            "total": 4,
+            "duplicates": [
+              "1",
+              "2",
+              "3"
+            ]
+          },
+          "actual": {
+            "total": 44,
+            "duplicates": []
+          },
+          "error": null
+        }
+      ],
+      "seed": 61104
+    },
+    "evaluation": {
+      "sandbox_id": "reprolab-2c2b380e58d1492988ed4da6f862cc36",
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "nonce": "539c3925cf7242ca933cc8cb04e2646d",
+      "policy": {
+        "gvisor": true,
+        "no_network": true,
+        "readonly_root": true,
+        "nonroot": true,
+        "memory_limit": true,
+        "cpu_limit": true,
+        "pid_limit": true,
+        "no_privilege": true,
+        "readonly_work": true,
+        "bounded_tmp": true,
+        "no_docker_logs": true
+      },
+      "policy_verified": true,
+      "source_sha256": "41e5c96bdee63bb03cc170faca36cd72df588b2ba8b92ae143e3252a3816b694",
+      "worker_sha256": "aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f",
+      "exit_code": 0,
+      "stop_reason": null,
+      "elapsed_ms": 282,
+      "stdout_bytes": 1584,
+      "stderr_bytes": 0,
+      "stdout_sha256": "0009374b40d952a88afb8cc405eee87e67cbfccb0f31d946a06d72bb7991b236",
+      "stderr_excerpt": "",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05",
+      "oom_killed": false,
+      "teardown": {
+        "confirmed": true,
+        "remove_exit_code": 0,
+        "absence_query_exit_code": 0,
+        "reason": null
+      },
+      "case_count": 20,
+      "inputs_sha256": "9197edae8cfda3a61aa9b90bb94e00165ef15470e490c7b27ed9f6aa42756713",
+      "expected_sha256": "ad592797cafd9721819f608fb9f53ccec468bcbcf877b02948f3618b057a10f2",
+      "passed": 20,
+      "failed": 0,
+      "valid_protocol": true,
+      "failures": [],
+      "seed": 61105
+    },
+    "attempts": [],
+    "message": "Real sandbox execution of a disclosed reference patch; this is not an autonomous AI run"
+  },
+  "canonical_payload": "{\"attempts\":[],\"baseline\":{\"case_count\":20,\"elapsed_ms\":344,\"exit_code\":0,\"expected_sha256\":\"a9f680712c17e705f03a680dfa6306eae0e2339ededcec85910e31c112b08634\",\"failed\":13,\"failures\":[{\"actual\":{\"duplicates\":[],\"total\":14},\"error\":null,\"expected\":{\"duplicates\":[\"a\"],\"total\":7},\"input\":{\"events\":[{\"delta\":7,\"id\":\"a\"},{\"delta\":7,\"id\":\"a\"}]}},{\"actual\":{\"duplicates\":[],\"total\":102},\"error\":null,\"expected\":{\"duplicates\":[\"x\"],\"total\":3},\"input\":{\"events\":[{\"delta\":4,\"id\":\"x\"},{\"delta\":99,\"id\":\"x\"},{\"delta\":-1,\"id\":\"y\"}]}},{\"actual\":{\"duplicates\":[],\"total\":-2},\"error\":null,\"expected\":{\"duplicates\":[\"3\",\"4\",\"1\"],\"total\":9},\"input\":{\"events\":[{\"delta\":-8,\"id\":\"1\"},{\"delta\":8,\"id\":\"2\"},{\"delta\":-7,\"id\":\"3\"},{\"delta\":16,\"id\":\"4\"},{\"delta\":-8,\"id\":\"3\"},{\"delta\":0,\"id\":\"4\"},{\"delta\":-3,\"id\":\"1\"}]}},{\"actual\":{\"duplicates\":[],\"total\":44},\"error\":null,\"expected\":{\"duplicates\":[\"1\",\"2\",\"3\"],\"total\":4},\"input\":{\"events\":[{\"delta\":1,\"id\":\"3\"},{\"delta\":2,\"id\":\"1\"},{\"delta\":19,\"id\":\"1\"},{\"delta\":1,\"id\":\"2\"},{\"delta\":6,\"id\":\"2\"},{\"delta\":17,\"id\":\"2\"},{\"delta\":-2,\"id\":\"3\"}]}}],\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"inputs_sha256\":\"e49ea273fcf570143c36fbed11f8c2a45ff52129d17f6087f1784a49722bc91a\",\"nonce\":\"75738c3dbb7e4d32b40de8af63d71928\",\"oom_killed\":false,\"passed\":7,\"policy\":{\"bounded_tmp\":true,\"cpu_limit\":true,\"gvisor\":true,\"memory_limit\":true,\"no_docker_logs\":true,\"no_network\":true,\"no_privilege\":true,\"nonroot\":true,\"pid_limit\":true,\"readonly_root\":true,\"readonly_work\":true},\"policy_verified\":true,\"runtime\":\"runsc\",\"sandbox_id\":\"reprolab-49d619145a804b1ea0ab7a71d358d31b\",\"seed\":61104,\"source_sha256\":\"1bd5e33835304d1d4a62ce4c4a70032f1fd22f494b42d52212345e4dfb9b54ad\",\"stderr_bytes\":0,\"stderr_excerpt\":\"\",\"stdout_bytes\":1508,\"stdout_sha256\":\"ea8d3e9cdf5896ef32815cd401fa2428ac59d54295966bf52a89726d76a3fcc0\",\"stop_reason\":null,\"teardown\":{\"absence_query_exit_code\":0,\"confirmed\":true,\"reason\":null,\"remove_exit_code\":0},\"valid_protocol\":true,\"worker_sha256\":\"aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f\"},\"candidate\":{\"code\":\"def solve(args):\\n    seen = set()\\n    duplicates = []\\n    total = 0\\n    for event in args['events']:\\n        if event['id'] in seen:\\n            if event['id'] not in duplicates:\\n                duplicates.append(event['id'])\\n        else:\\n            seen.add(event['id'])\\n            total += event['delta']\\n    return {'total': total, 'duplicates': duplicates}\\n\",\"explanation\":\"Disclosed reference repair used to test the sandbox and evaluator; no model was called\",\"provider\":{\"model\":null,\"name\":\"reference-fixture\"},\"sha256\":\"41e5c96bdee63bb03cc170faca36cd72df588b2ba8b92ae143e3252a3816b694\"},\"created_at\":\"2026-11-04T23:25:56.399800+00:00\",\"environment\":{\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"runtime\":\"runsc\"},\"evaluation\":{\"case_count\":20,\"elapsed_ms\":282,\"exit_code\":0,\"expected_sha256\":\"ad592797cafd9721819f608fb9f53ccec468bcbcf877b02948f3618b057a10f2\",\"failed\":0,\"failures\":[],\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"inputs_sha256\":\"9197edae8cfda3a61aa9b90bb94e00165ef15470e490c7b27ed9f6aa42756713\",\"nonce\":\"539c3925cf7242ca933cc8cb04e2646d\",\"oom_killed\":false,\"passed\":20,\"policy\":{\"bounded_tmp\":true,\"cpu_limit\":true,\"gvisor\":true,\"memory_limit\":true,\"no_docker_logs\":true,\"no_network\":true,\"no_privilege\":true,\"nonroot\":true,\"pid_limit\":true,\"readonly_root\":true,\"readonly_work\":true},\"policy_verified\":true,\"runtime\":\"runsc\",\"sandbox_id\":\"reprolab-2c2b380e58d1492988ed4da6f862cc36\",\"seed\":61105,\"source_sha256\":\"41e5c96bdee63bb03cc170faca36cd72df588b2ba8b92ae143e3252a3816b694\",\"stderr_bytes\":0,\"stderr_excerpt\":\"\",\"stdout_bytes\":1584,\"stdout_sha256\":\"0009374b40d952a88afb8cc405eee87e67cbfccb0f31d946a06d72bb7991b236\",\"stop_reason\":null,\"teardown\":{\"absence_query_exit_code\":0,\"confirmed\":true,\"reason\":null,\"remove_exit_code\":0},\"valid_protocol\":true,\"worker_sha256\":\"aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f\"},\"evidence_origin\":\"ci-reference-evaluation\",\"fixture_id\":\"retry-events\",\"job_id\":\"ci-reference-retry-events\",\"message\":\"Real sandbox execution of a disclosed reference patch; this is not an autonomous AI run\",\"source\":\"def solve(args):\\n    return {'total': sum(e['delta'] for e in args['events']), 'duplicates': []}\\n\",\"source_sha256\":\"1bd5e33835304d1d4a62ce4c4a70032f1fd22f494b42d52212345e4dfb9b54ad\",\"status\":\"verified\",\"title\":\"Webhook retries\"}",
+  "sha256": "8644daf60695b844bc5b1bc6eed4af6251de2d80e2f3011d6052b4c9c1196202"
+}

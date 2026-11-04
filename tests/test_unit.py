@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from unittest.mock import patch
 from .helpers import execution
 from reprolab.evaluator import evaluate
 from reprolab.fixtures import FIXTURES, cases, expected
@@ -75,6 +76,20 @@ class EvaluatorTests(unittest.TestCase):
             self.assertIn(IMAGE, command)
             self.assertNotIn("VULTR_INFERENCE_API_KEY", " ".join(command))
             with self.assertRaises(ValueError): Sandbox(image="python:latest", work_root=Path(directory))
+
+    def test_provider_feedback_never_sends_held_out_cases_or_expected_answers(self):
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({"choices":[{"message":{"content":json.dumps({"code":"def solve(args): return 1\n","explanation":"Unit response"})}}]}).encode()
+        with patch("urllib.request.urlopen", return_value=Response()) as call:
+            VultrProvider("unit-only-key").propose(FIXTURES["rounding"], {"input":{"private-marker":"not-for-the-model"},"expected":"hidden-answer","actual":0,"error":None})
+        payload = json.loads(call.call_args.args[0].data)
+        prompt = payload["messages"][1]["content"]
+        self.assertNotIn("not-for-the-model", prompt)
+        self.assertNotIn("hidden-answer", prompt)
+        self.assertNotIn("unit-only-key", prompt)
 
 
 class StorageTests(unittest.TestCase):

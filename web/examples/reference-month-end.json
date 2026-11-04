@@ -1,0 +1,158 @@
+{
+  "schema_version": 2,
+  "payload": {
+    "job_id": "ci-reference-month-end",
+    "fixture_id": "month-end",
+    "title": "Month-end scheduling",
+    "source": "from datetime import date\n\ndef solve(args):\n    current = date.fromisoformat(args['date'])\n    return date(current.year, current.month + args['months'], current.day).isoformat()\n",
+    "source_sha256": "bd3a4d25dbf6abd134ab62baf1381247ef3155c8602cc27270e6d0fbb74f8b8b",
+    "created_at": "2026-11-04T23:25:54.830997+00:00",
+    "status": "verified",
+    "evidence_origin": "ci-reference-evaluation",
+    "environment": {
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05"
+    },
+    "candidate": {
+      "code": "import calendar\nfrom datetime import date\n\ndef solve(args):\n    current = date.fromisoformat(args['date'])\n    absolute = current.year * 12 + current.month - 1 + args['months']\n    year, month0 = divmod(absolute, 12)\n    day = min(current.day, calendar.monthrange(year, month0 + 1)[1])\n    return date(year, month0 + 1, day).isoformat()\n",
+      "sha256": "8275976ae659f82b58574c4967f27c4ed1bb843fddad5d6f1c47b73438368cac",
+      "explanation": "Disclosed reference repair used to test the sandbox and evaluator; no model was called",
+      "provider": {
+        "name": "reference-fixture",
+        "model": null
+      }
+    },
+    "baseline": {
+      "sandbox_id": "reprolab-6cae9b5a3f4e4299bfd0319c0d1a1a36",
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "nonce": "54caa41824324ff2a6b83b15086e21ec",
+      "policy": {
+        "gvisor": true,
+        "no_network": true,
+        "readonly_root": true,
+        "nonroot": true,
+        "memory_limit": true,
+        "cpu_limit": true,
+        "pid_limit": true,
+        "no_privilege": true,
+        "readonly_work": true,
+        "bounded_tmp": true,
+        "no_docker_logs": true
+      },
+      "policy_verified": true,
+      "source_sha256": "bd3a4d25dbf6abd134ab62baf1381247ef3155c8602cc27270e6d0fbb74f8b8b",
+      "worker_sha256": "aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f",
+      "exit_code": 0,
+      "stop_reason": null,
+      "elapsed_ms": 339,
+      "stdout_bytes": 1550,
+      "stderr_bytes": 0,
+      "stdout_sha256": "cab05d7dc8730e0d227bb386c9d281e0552390500758353d3775cd3eb2bd867f",
+      "stderr_excerpt": "",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05",
+      "oom_killed": false,
+      "teardown": {
+        "confirmed": true,
+        "remove_exit_code": 0,
+        "absence_query_exit_code": 0,
+        "reason": null
+      },
+      "case_count": 20,
+      "inputs_sha256": "fda685265a09cefd2851239e95ae138e4a1b47e2547c56162662e85fe913587c",
+      "expected_sha256": "51cd33e69af6d21bb7dadf7ad52278b71820dab0fd1f2bc81461176c31ae5af5",
+      "passed": 3,
+      "failed": 17,
+      "valid_protocol": true,
+      "failures": [
+        {
+          "input": {
+            "date": "2026-01-31",
+            "months": 1
+          },
+          "expected": "2026-02-28",
+          "actual": null,
+          "error": "ValueError: day is out of range for month"
+        },
+        {
+          "input": {
+            "date": "2026-12-31",
+            "months": 1
+          },
+          "expected": "2027-01-31",
+          "actual": null,
+          "error": "ValueError: month must be in 1..12"
+        },
+        {
+          "input": {
+            "date": "2028-01-31",
+            "months": 1
+          },
+          "expected": "2028-02-29",
+          "actual": null,
+          "error": "ValueError: day is out of range for month"
+        },
+        {
+          "input": {
+            "date": "2028-02-29",
+            "months": 12
+          },
+          "expected": "2029-02-28",
+          "actual": null,
+          "error": "ValueError: month must be in 1..12"
+        }
+      ],
+      "seed": 61104
+    },
+    "evaluation": {
+      "sandbox_id": "reprolab-c35a8f03c9e04db2bd486c9ea88ea70a",
+      "runtime": "runsc",
+      "image_ref": "python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487",
+      "nonce": "03b401312c40459e9c8afb38c8cdacc7",
+      "policy": {
+        "gvisor": true,
+        "no_network": true,
+        "readonly_root": true,
+        "nonroot": true,
+        "memory_limit": true,
+        "cpu_limit": true,
+        "pid_limit": true,
+        "no_privilege": true,
+        "readonly_work": true,
+        "bounded_tmp": true,
+        "no_docker_logs": true
+      },
+      "policy_verified": true,
+      "source_sha256": "8275976ae659f82b58574c4967f27c4ed1bb843fddad5d6f1c47b73438368cac",
+      "worker_sha256": "aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f",
+      "exit_code": 0,
+      "stop_reason": null,
+      "elapsed_ms": 350,
+      "stdout_bytes": 1128,
+      "stderr_bytes": 0,
+      "stdout_sha256": "5e02c61d492717d370840937130feed1c5d483b523c9976366b54cbf96b8c234",
+      "stderr_excerpt": "",
+      "image_id": "sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05",
+      "oom_killed": false,
+      "teardown": {
+        "confirmed": true,
+        "remove_exit_code": 0,
+        "absence_query_exit_code": 0,
+        "reason": null
+      },
+      "case_count": 20,
+      "inputs_sha256": "615f5e60e477aa1bac58bfc7ba0450511298677d32ec8364a3c4ef73e41300a4",
+      "expected_sha256": "6fbac07c4addf6603d82e8f60476a3fad05babb56f1c895754533e57db7bfed8",
+      "passed": 20,
+      "failed": 0,
+      "valid_protocol": true,
+      "failures": [],
+      "seed": 61105
+    },
+    "attempts": [],
+    "message": "Real sandbox execution of a disclosed reference patch; this is not an autonomous AI run"
+  },
+  "canonical_payload": "{\"attempts\":[],\"baseline\":{\"case_count\":20,\"elapsed_ms\":339,\"exit_code\":0,\"expected_sha256\":\"51cd33e69af6d21bb7dadf7ad52278b71820dab0fd1f2bc81461176c31ae5af5\",\"failed\":17,\"failures\":[{\"actual\":null,\"error\":\"ValueError: day is out of range for month\",\"expected\":\"2026-02-28\",\"input\":{\"date\":\"2026-01-31\",\"months\":1}},{\"actual\":null,\"error\":\"ValueError: month must be in 1..12\",\"expected\":\"2027-01-31\",\"input\":{\"date\":\"2026-12-31\",\"months\":1}},{\"actual\":null,\"error\":\"ValueError: day is out of range for month\",\"expected\":\"2028-02-29\",\"input\":{\"date\":\"2028-01-31\",\"months\":1}},{\"actual\":null,\"error\":\"ValueError: month must be in 1..12\",\"expected\":\"2029-02-28\",\"input\":{\"date\":\"2028-02-29\",\"months\":12}}],\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"inputs_sha256\":\"fda685265a09cefd2851239e95ae138e4a1b47e2547c56162662e85fe913587c\",\"nonce\":\"54caa41824324ff2a6b83b15086e21ec\",\"oom_killed\":false,\"passed\":3,\"policy\":{\"bounded_tmp\":true,\"cpu_limit\":true,\"gvisor\":true,\"memory_limit\":true,\"no_docker_logs\":true,\"no_network\":true,\"no_privilege\":true,\"nonroot\":true,\"pid_limit\":true,\"readonly_root\":true,\"readonly_work\":true},\"policy_verified\":true,\"runtime\":\"runsc\",\"sandbox_id\":\"reprolab-6cae9b5a3f4e4299bfd0319c0d1a1a36\",\"seed\":61104,\"source_sha256\":\"bd3a4d25dbf6abd134ab62baf1381247ef3155c8602cc27270e6d0fbb74f8b8b\",\"stderr_bytes\":0,\"stderr_excerpt\":\"\",\"stdout_bytes\":1550,\"stdout_sha256\":\"cab05d7dc8730e0d227bb386c9d281e0552390500758353d3775cd3eb2bd867f\",\"stop_reason\":null,\"teardown\":{\"absence_query_exit_code\":0,\"confirmed\":true,\"reason\":null,\"remove_exit_code\":0},\"valid_protocol\":true,\"worker_sha256\":\"aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f\"},\"candidate\":{\"code\":\"import calendar\\nfrom datetime import date\\n\\ndef solve(args):\\n    current = date.fromisoformat(args['date'])\\n    absolute = current.year * 12 + current.month - 1 + args['months']\\n    year, month0 = divmod(absolute, 12)\\n    day = min(current.day, calendar.monthrange(year, month0 + 1)[1])\\n    return date(year, month0 + 1, day).isoformat()\\n\",\"explanation\":\"Disclosed reference repair used to test the sandbox and evaluator; no model was called\",\"provider\":{\"model\":null,\"name\":\"reference-fixture\"},\"sha256\":\"8275976ae659f82b58574c4967f27c4ed1bb843fddad5d6f1c47b73438368cac\"},\"created_at\":\"2026-11-04T23:25:54.830997+00:00\",\"environment\":{\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"runtime\":\"runsc\"},\"evaluation\":{\"case_count\":20,\"elapsed_ms\":350,\"exit_code\":0,\"expected_sha256\":\"6fbac07c4addf6603d82e8f60476a3fad05babb56f1c895754533e57db7bfed8\",\"failed\":0,\"failures\":[],\"image_id\":\"sha256:37ccb536022bb36c4570856b55ebfa85bf07827e3c2fa3eba37f0dac62eebc05\",\"image_ref\":\"python:3.12-slim-bookworm@sha256:623674a14ef93d052bb9b0de4dbf5f28eb578a35263838941cc8aa43213c1487\",\"inputs_sha256\":\"615f5e60e477aa1bac58bfc7ba0450511298677d32ec8364a3c4ef73e41300a4\",\"nonce\":\"03b401312c40459e9c8afb38c8cdacc7\",\"oom_killed\":false,\"passed\":20,\"policy\":{\"bounded_tmp\":true,\"cpu_limit\":true,\"gvisor\":true,\"memory_limit\":true,\"no_docker_logs\":true,\"no_network\":true,\"no_privilege\":true,\"nonroot\":true,\"pid_limit\":true,\"readonly_root\":true,\"readonly_work\":true},\"policy_verified\":true,\"runtime\":\"runsc\",\"sandbox_id\":\"reprolab-c35a8f03c9e04db2bd486c9ea88ea70a\",\"seed\":61105,\"source_sha256\":\"8275976ae659f82b58574c4967f27c4ed1bb843fddad5d6f1c47b73438368cac\",\"stderr_bytes\":0,\"stderr_excerpt\":\"\",\"stdout_bytes\":1128,\"stdout_sha256\":\"5e02c61d492717d370840937130feed1c5d483b523c9976366b54cbf96b8c234\",\"stop_reason\":null,\"teardown\":{\"absence_query_exit_code\":0,\"confirmed\":true,\"reason\":null,\"remove_exit_code\":0},\"valid_protocol\":true,\"worker_sha256\":\"aa386c03139987422cd3672b78fa02c52fb296bcf962e0870c2bb5626168539f\"},\"evidence_origin\":\"ci-reference-evaluation\",\"fixture_id\":\"month-end\",\"job_id\":\"ci-reference-month-end\",\"message\":\"Real sandbox execution of a disclosed reference patch; this is not an autonomous AI run\",\"source\":\"from datetime import date\\n\\ndef solve(args):\\n    current = date.fromisoformat(args['date'])\\n    return date(current.year, current.month + args['months'], current.day).isoformat()\\n\",\"source_sha256\":\"bd3a4d25dbf6abd134ab62baf1381247ef3155c8602cc27270e6d0fbb74f8b8b\",\"status\":\"verified\",\"title\":\"Month-end scheduling\"}",
+  "sha256": "0e39a0d60fc866f970248148db7d8395d49a59aaecd7c3a52e84f32c386612ce"
+}

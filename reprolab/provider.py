@@ -57,8 +57,9 @@ class VultrProvider:
     def propose(self, fixture: Fixture, failure: dict[str, Any], previous: str | None = None) -> dict[str, Any]:
         if not self.configured:
             raise ProviderUnavailable("Connect Vultr Serverless Inference before starting a live job")
+        observed = {key: failure[key] for key in ("actual", "error") if key in failure} if failure.get("input") == fixture.example_input else {"error": "The repair did not satisfy the private independent cases. Follow the stated task policy."}
         prompt = {"task": fixture.description, "source": previous or fixture.source,
-                  "known_example": fixture.example_input, "observed_failure": failure,
+                  "known_example": fixture.example_input, "observed_failure": observed,
                   "retry": previous is not None}
         body = {"model": self.model, "temperature": 0.1, "max_tokens": 4096,
                 "reasoning_effort": "low", "response_format": {"type": "json_object"},
