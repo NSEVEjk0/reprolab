@@ -1,0 +1,11 @@
+[Unit]
+Description=ReproLab sandbox lifetime watchdog
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=30s
+AccuracySec=2s
+Unit=reprolab-gc.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,45 @@
+[
+  {
+    "id": "month-end",
+    "title": "Month-end scheduling",
+    "description": "Scheduling January 31 one month ahead crashes. December also fails to roll into the next year. Preserve the day when possible; otherwise use the target month's last day.",
+    "source": "from datetime import date\n\ndef solve(args):\n    current = date.fromisoformat(args['date'])\n    return date(current.year, current.month + args['months'], current.day).isoformat()\n",
+    "example": {
+      "date": "2026-01-31",
+      "months": 1
+    }
+  },
+  {
+    "id": "rounding",
+    "title": "Discount rounding",
+    "description": "The checkout drops fractional cents instead of rounding half up after applying the discount to the complete basket. Input prices are integer cents and discount_bps is basis points.",
+    "source": "def solve(args):\n    total = sum(item['unit_minor'] * item['quantity'] for item in args['items'])\n    return int(total * (1 - args['discount_bps'] / 10000))\n",
+    "example": {
+      "items": [
+        {
+          "unit_minor": 299,
+          "quantity": 1
+        }
+      ],
+      "discount_bps": 1000
+    }
+  },
+  {
+    "id": "retry-events",
+    "title": "Webhook retries",
+    "description": "A retried event is counted twice. Apply each event ID only once, preserve the first occurrence and report duplicate IDs once in order of first duplicate.",
+    "source": "def solve(args):\n    return {'total': sum(e['delta'] for e in args['events']), 'duplicates': []}\n",
+    "example": {
+      "events": [
+        {
+          "id": "a",
+          "delta": 7
+        },
+        {
+          "id": "a",
+          "delta": 7
+        }
+      ]
+    }
+  }
+]

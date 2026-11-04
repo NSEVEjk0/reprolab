@@ -1,0 +1,14 @@
+{
+  "name": "reprolab",
+  "private": true,
+  "type": "module",
+  "description": "Reproduce a bug, contain an AI repair, and replay its independent evaluation.",
+  "scripts": {
+    "test": "python3 -m unittest tests.test_unit -v",
+    "test:integration": "python3 -m unittest tests.test_integration -v",
+    "test:browser": "playwright test",
+    "check:web": "node --check web/app.js"
+  },
+  "devDependencies": {"@playwright/test": "1.63.0"},
+  "engines": {"node": ">=22"}
+}

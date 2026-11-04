@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.local/
+data/
+node_modules/
+__pycache__/
+*.pyc
+reports/
+test-results/
+playwright-report/
+.vercel/

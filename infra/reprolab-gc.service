@@ -1,0 +1,18 @@
+[Unit]
+Description=Remove expired ReproLab-owned sandboxes
+After=docker.service
+
+[Service]
+Type=oneshot
+User=reprolab
+Group=reprolab
+SupplementaryGroups=docker
+WorkingDirectory=/opt/reprolab
+Environment=REPROLAB_STATE_DIR=/var/lib/reprolab
+ExecStart=/usr/bin/python3 -m reprolab.gc
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/reprolab
+UMask=0077

@@ -1,0 +1,41 @@
+name: Verify ReproLab
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      REPROLAB_INTEGRATION: "true"
+      REPROLAB_ORIGIN: http://127.0.0.1:8080
+      REPROLAB_STATE_DIR: /tmp/reprolab-ci-controller
+      REPROLAB_PUBLIC_JOBS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python3 -m unittest tests.test_unit -v
+      - run: bash infra/install-gvisor.sh
+      - run: python3 -m reprolab.cli doctor
+      - run: python3 -m unittest tests.test_integration -v
+      - run: PYTHONPATH=. python3 scripts/install-ci-examples.py
+      - run: npm install --no-audit --no-fund
+      - run: npm run check:web
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reprolab-verification
+          path: |
+            package-lock.json
+            reports
+            test-results
+          retention-days: 7

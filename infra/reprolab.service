@@ -1,0 +1,29 @@
+[Unit]
+Description=ReproLab bounded repair controller
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=reprolab
+Group=reprolab
+SupplementaryGroups=docker
+WorkingDirectory=/opt/reprolab
+EnvironmentFile=/etc/reprolab/reprolab.env
+ExecStart=/usr/bin/python3 -m reprolab.server
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ReadWritePaths=/var/lib/reprolab
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+UMask=0077
+MemoryMax=384M
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target
