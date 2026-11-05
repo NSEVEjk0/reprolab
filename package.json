@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Reproduce a bug, contain an AI repair, and replay its independent evaluation.",
   "scripts": {
-    "test": "python3 -m unittest tests.test_unit -v",
+    "test": "python3 -m unittest tests.test_unit tests.test_deploy tests.test_host tests.test_runtime_bundle -v",
     "test:integration": "python3 -m unittest tests.test_integration -v",
     "test:browser": "playwright test",
     "check:web": "node --check web/app.js"
