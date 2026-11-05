@@ -41,13 +41,21 @@ The probe uses a controller-owned dummy file. It checks host-file and network is
 
 The contest deployment needs **both this web interface and its controller on Vultr**, and live repairs must use Vultr Serverless Inference. A static frontend preview elsewhere is not that deployment.
 
-On a dedicated Ubuntu 24.04 VM:
+On a dedicated Ubuntu VM with Python 3.12+ (Ubuntu 24.04 or 26.10):
 
 1. Install Docker, Python, Caddy and the pinned gVisor runtime. Pull the immutable Python image.
 2. Put this repository in `/opt/reprolab`. Create a `reprolab` service user and `/var/lib/reprolab` state directory. The service user's Docker access is part of the trusted controller boundary.
 3. Store `.env.example` values privately in `/etc/reprolab/reprolab.env`, readable only by root. Use the actual HTTPS origin, a Vultr inference key and either a demo access code or an explicit `REPROLAB_PUBLIC_JOBS=true` setting. The default permits no live jobs.
 4. Install the controller and garbage-collection service/timer from `infra/`. Point a domain to the VM, configure Caddy from the example and enable the services.
 5. Run `doctor`, the integration tests, a real inference repair and a local replay. Inspect the browser and the downloaded evidence before recording a demo.
+
+The automated [Vultr installer](infra/setup-vultr.sh) runs these checks and configures the controller, independent garbage-collection timer, and Caddy HTTPS. Run it as root from the VM's ordinary terminal with the instance's public IPv4 and the exact source commit. A `PUBLIC_IP.sslip.io` hostname is supported when you do not own a domain. The installer confirms that the expected IP belongs to the host and that DNS resolves to it, then asks for the Serverless Inference key with hidden terminal input. The provider key and generated demo access code stay in root-only `/etc/reprolab/` files. Existing credentials are preserved on reruns.
+
+```sh
+sudo bash infra/setup-vultr.sh --ip PUBLIC_IPV4 --commit EXACT_SOURCE_COMMIT
+```
+
+Installation success requires unit and actual gVisor containment checks, the reference browser workflow, HTTPS readiness, one real Vultr repair through the live browser, all 20 independent cases, and a fresh gVisor replay of downloaded evidence. One verification job permits the existing bounded retry and counts toward the eight-job daily limit. Browser traces and video are disabled for this operator verification; the provider key never enters its browser environment. The installer records failures in `/etc/reprolab/install-status.json` and keeps reports private under `/opt/reprolab/reports/`. TCP 80 and 443 must be allowed by the Vultr firewall for automatic TLS. Ubuntu 26.10 support must be confirmed by those checks on the actual host; local syntax checks alone do not establish compatibility.
 
 The controller serves the interface and `/api/*` together. It accepts only supported fixture IDs, has a four-job queue, one repair worker and an atomic daily budget (default eight jobs). Each job is read using an unguessable capability token; only its hash is stored. A restart marks pending jobs interrupted and starts no automatic paid retries. An independent timer removes expired containers owned by that deployment.
 
