@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - run: python3 -m unittest tests.test_unit -v
+      - run: python3 -m unittest tests.test_unit tests.test_deploy tests.test_host -v
       - run: bash infra/install-gvisor.sh
       - run: python3 -m reprolab.cli doctor
       - run: python3 -m unittest tests.test_integration -v
