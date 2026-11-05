@@ -139,7 +139,8 @@ class Sandbox:
     def ready(self) -> dict[str, Any]:
         runtimes = self.control("info", "--format", "{{json .Runtimes}}")
         if runtimes.stop_reason or runtimes.exit_code != 0:
-            raise SandboxUnavailable("The Docker daemon is unavailable to the controller")
+            reason = runtimes.stop_reason or f"exit code {runtimes.exit_code}"
+            raise SandboxUnavailable(f"The Docker daemon is unavailable to the controller ({reason})")
         try:
             if "runsc" not in json.loads(runtimes.stdout):
                 raise SandboxUnavailable("The required gVisor runsc runtime is not installed")
