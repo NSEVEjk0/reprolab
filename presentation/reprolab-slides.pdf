@@ -1,0 +1,107 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 4 /Kids [5 0 R 7 0 R 9 0 R 11 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 654 >>
+stream
+0.93 0.96 0.94 rg 0 0 960 540 re f
+0.09 0.25 0.21 rg
+BT /F1 11 Tf 48 491 Td (ReproLab  |  Vultr Agent Rush  |  Blast Radius Zero) Tj ET
+BT /F2 35 Tf 48 468.92 Td (An AI repair should come with evidence.) Tj ET
+BT /F1 17 Tf 48 410.12 Td (A candidate can print ìsuccessî and leave the bug behind. Giving generated code host access also) Tj ET
+BT /F1 17 Tf 48 388.36 Td (gives a small task a large failure surface.) Tj ET
+BT /F1 17 Tf 48 358.6 Td (Reproduce the failure. Contain the repair. Check it independently. Keep evidence for a fresh replay.) Tj ET
+BT /F1 11 Tf 48 27 Td (https://139.84.249.47.sslip.io  |  https://github.com/NSEVEjk0/reprolab) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 956 >>
+stream
+0.93 0.96 0.94 rg 0 0 960 540 re f
+0.09 0.25 0.21 rg
+BT /F1 11 Tf 48 491 Td (The actual workflow) Tj ET
+BT /F2 35 Tf 48 468.92 Td (A proposal is not a passing result.) Tj ET
+BT /F1 17 Tf 48 410.12 Td (Reproduce The original implementation must fail independent cases.) Tj ET
+BT /F1 17 Tf 48 380.36 Td (Propose Vultr Serverless Inference produces a bounded Python repair.) Tj ET
+BT /F1 17 Tf 48 350.6 Td (Evaluate A fresh gVisor sandbox runs it; expected answers stay in the controller.) Tj ET
+BT /F1 17 Tf 48 320.84000000000003 Td (Remove & replay Confirm cleanup and export the candidate, checks and fingerprints.) Tj ET
+BT /F1 17 Tf 48 291.08000000000004 Td (Twenty independent cases for each maintained fixture: calendar rollover, integer-cent rounding and) Tj ET
+BT /F1 17 Tf 48 269.32000000000005 Td (webhook retries.) Tj ET
+BT /F1 11 Tf 48 27 Td (Reference examples are disclosed model-free executions. Live repairs use actual Vultr inference.) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1000 >>
+stream
+0.93 0.96 0.94 rg 0 0 960 540 re f
+0.09 0.25 0.21 rg
+BT /F1 11 Tf 48 491 Td (Architecture and verified deployment) Tj ET
+BT /F2 35 Tf 48 468.92 Td (Vultr controls the complete run.) Tj ET
+BT /F1 17 Tf 48 410.12 Td (HTTPS browser  >  Vultr VM controller  >  Vultr Serverless Inference  >  disposable gVisor sandbox  > ) Tj ET
+BT /F1 17 Tf 48 388.36 Td (independent evaluator  >  evidence.) Tj ET
+BT /F1 17 Tf 48 358.6 Td (Pinned runtime and image; no network, read-only root and mounts, nonroot identity.) Tj ET
+BT /F1 17 Tf 48 328.84000000000003 Td (Fixed CPU, memory, PID, time and streamed-output limits; bounded job admission and retry.) Tj ET
+BT /F1 17 Tf 48 299.08000000000004 Td (Genuine live repair: all 20 cases passed, fresh replay and cleanup verified.) Tj ET
+BT /F1 17 Tf 48 269.32000000000005 Td (The VMís existing OptimAI crawler was preserved.) Tj ET
+BT /F1 11 Tf 48 27 Td (Deployed source: b5cbdb9ad95816d26bf56183d0e9972acbd5e469. Show actual containment evidence in the video.) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 1064 >>
+stream
+0.93 0.96 0.94 rg 0 0 960 540 re f
+0.09 0.25 0.21 rg
+BT /F1 11 Tf 48 491 Td (Useful first scope and limits) Tj ET
+BT /F2 35 Tf 48 468.92 Td (Small failures. Inspectable evidence.) Tj ET
+BT /F1 17 Tf 48 410.12 Td (ReproLab makes agent-generated repairs reviewable and repeatable for three owned Python fixtures. It) Tj ET
+BT /F1 17 Tf 48 388.36 Td (checks outputs and lifecycle, rather than trusting a success banner.) Tj ET
+BT /F1 17 Tf 48 358.6 Td (Arbitrary repositories and additional languages are outside this version.) Tj ET
+BT /F1 17 Tf 48 328.84000000000003 Td (The trusted controller and Docker administrator remain part of the boundary.) Tj ET
+BT /F1 17 Tf 48 299.08000000000004 Td (Integrity hashes bind recorded bytes; they are not hardware or host attestations.) Tj ET
+BT /F1 17 Tf 48 269.32000000000005 Td (Successful tests are evidence for these cases, not a security audit or universal correctness proof.) Tj ET
+BT /F1 11 Tf 48 27 Td (Live demo: https://139.84.249.47.sslip.io  |  Demo access supplied separately  |  MIT-licensed application) Tj ET
+endstream
+endobj
+xref
+0 13
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000140 00000 n 
+0000000237 00000 n 
+0000000339 00000 n 
+0000000475 00000 n 
+0000001180 00000 n 
+0000001316 00000 n 
+0000002323 00000 n 
+0000002460 00000 n 
+0000003513 00000 n 
+0000003651 00000 n 
+trailer
+<< /Size 13 /Root 1 0 R >>
+startxref
+4768
+%%EOF

@@ -4,9 +4,15 @@ Reproduce a bug, contain an AI repair, and take away evidence you can replay. A 
 
 ReproLab starts with three small, owned Python failures: month-end scheduling, checkout rounding and webhook retries. Each has 20 independent cases. A live job first demonstrates the original failure, asks **Vultr Serverless Inference** for a repair, then checks it in another disposable sandbox. One failed repair can receive one bounded retry.
 
+## Problem and solution
+
+An AI repair can print a success message while leaving the bug in place, or run code with more host access than its task needs. ReproLab separates proposing a fix from accepting it: the controller reproduces the original failure, runs the candidate inside gVisor, checks independent answers, confirms cleanup and exports evidence for a fresh replay.
+
 ## Use the lab
 
-Open the [public ReproLab preview](https://reprolab-ckay.vercel.app) to inspect the executed reference repairs and their evidence. The live Vultr controller and inference connection remain to be configured.
+Open [ReproLab on Vultr](https://139.84.249.47.sslip.io). Both the website and controller run on the Vultr VM; model calls use Vultr Serverless Inference. A demo access code is required to start a job and is supplied separately by the operator.
+
+The deployed application source is [b5cbdb9](https://github.com/NSEVEjk0/reprolab/tree/b5cbdb9ad95816d26bf56183d0e9972acbd5e469). The completed host verification exercised a real repair passing all 20 independent cases, evidence integrity, a fresh sandbox replay and cleanup. The existing OptimAI crawler was preserved. The earlier [reference preview](https://reprolab-ckay.vercel.app) remains a disclosed model-free example.
 
 Choose a failure, start a live repair and inspect the original failures, candidate results, exact source and image fingerprints, and confirmed removal of each sandbox. Download the evidence and replay the candidate yourself.
 
@@ -14,11 +20,11 @@ The browser also supports **explicitly labelled reference examples** generated b
 
 ## Run and verify
 
-Use Python 3.12+ on a dedicated Linux x86_64 Docker host. Install the pinned gVisor release and image using `bash infra/install-gvisor.sh`; this changes the Docker runtime configuration on that host. No generated code runs through ordinary Python on the host.
+Use Python 3.12+ on a Linux x86_64 Docker host. A dedicated VM is the easiest setup. Install the pinned gVisor release and image using `bash infra/install-gvisor.sh`; this adds a runtime to the Docker configuration by reload, preserving its default runtime and existing containers. The complete pinned bundle lives under `/opt/reprolab-runtime/`, including `runsc` and its required `gvisor-bin/gvisor_sentry` companion. Archive checksums, paths and existing file contents are checked before installation. Reruns add missing companion files and preserve matching binaries; existing host binaries are preserved. No generated code runs through ordinary Python on the host.
 
 ```sh
 python3 -m reprolab.cli doctor
-python3 -m unittest tests.test_unit -v
+python3 -m unittest tests.test_unit tests.test_deploy tests.test_host tests.test_runtime_bundle -v
 REPROLAB_INTEGRATION=true python3 -m unittest tests.test_integration -v
 python3 -m reprolab.cli run month-end --output evidence.json
 python3 -m reprolab.cli verify evidence.json
@@ -41,13 +47,27 @@ The probe uses a controller-owned dummy file. It checks host-file and network is
 
 The contest deployment needs **both this web interface and its controller on Vultr**, and live repairs must use Vultr Serverless Inference. A static frontend preview elsewhere is not that deployment.
 
-On a dedicated Ubuntu 24.04 VM:
+On a dedicated Ubuntu VM with Python 3.12+ (Ubuntu 24.04 or 26.10):
 
 1. Install Docker, Python, Caddy and the pinned gVisor runtime. Pull the immutable Python image.
 2. Put this repository in `/opt/reprolab`. Create a `reprolab` service user and `/var/lib/reprolab` state directory. The service user's Docker access is part of the trusted controller boundary.
 3. Store `.env.example` values privately in `/etc/reprolab/reprolab.env`, readable only by root. Use the actual HTTPS origin, a Vultr inference key and either a demo access code or an explicit `REPROLAB_PUBLIC_JOBS=true` setting. The default permits no live jobs.
 4. Install the controller and garbage-collection service/timer from `infra/`. Point a domain to the VM, configure Caddy from the example and enable the services.
 5. Run `doctor`, the integration tests, a real inference repair and a local replay. Inspect the browser and the downloaded evidence before recording a demo.
+
+The automated [Vultr installer](infra/setup-vultr.sh) runs these checks and configures the controller, independent garbage-collection timer, and a separate `reprolab-https.service` using `/etc/caddy/reprolab.Caddyfile`. It preserves an existing host Caddyfile. Run it as root from the VM's ordinary terminal with the instance's public IPv4 and the exact source commit. A `PUBLIC_IP.sslip.io` hostname is supported when you do not own a domain. The installer confirms that the expected IP belongs to the host and that DNS resolves to it, then asks for the Serverless Inference key with hidden terminal input. The provider key and generated demo access code stay in root-only `/etc/reprolab/` files. Existing credentials are preserved on reruns.
+
+The key comes from **Compute → Serverless Inference → target subscription → Overview → Copy API Key**. Configuration validates it with the authenticated `/v1/health` endpoint before checking model availability. The `/v1/models` list is public; access to that list alone does not validate a key. See Vultr's [subscription connection guide](https://docs.vultr.com/products/compute/serverless-inference/management/connection) and [health check guide](https://docs.vultr.com/products/compute/serverless-inference/management/health-checks).
+
+If installation stopped at `one-real-vultr-repair` because inference rejected a key, the [recovery script](infra/recover-vultr.sh) can resume that completed infrastructure setup. It verifies the failed phase and matching deployment source records, accepts a replacement through hidden terminal input, and validates authentication and model availability before changing the private configuration. Rejected replacements leave the original configuration intact. It preserves the deployed source and other settings, restarts the two ReproLab services, and runs the live browser repair, fresh evidence replay and existing-container preservation check before recording completion. It also works with the earlier model-only validator. Use the script from a pinned source revision and verify its checksum before running it as root on the Vultr VM.
+
+```sh
+sudo bash infra/setup-vultr.sh --ip PUBLIC_IPV4 --commit EXACT_SOURCE_COMMIT
+```
+
+For an existing crawler on the same VM, add `--shared-host` to the bootstrap or setup command. This performs coexistence checks before package installation and keeps the installed Docker version. It needs at least 2 GiB currently available RAM, at least two vCPUs, 12 GiB free disk, TCP 80/443/8080 and UDP 443 available, and a running Docker service that supports reload. Containers with host administration access, privileged capabilities, or mounts exposing ReproLab's private paths require a separate VM. An active or enabled host Caddy service also needs a separate deployment or an operator-planned proxy integration. The installer adds only the pinned `runsc` runtime, preserves other runtime entries and Docker's default, and restores the exact prior Docker configuration if activation fails. It never restarts Docker to force the change.
+
+Installation success requires unit and actual gVisor containment checks, the reference browser workflow, HTTPS readiness, one real Vultr repair through the live browser, all 20 independent cases, a fresh gVisor replay of downloaded evidence, and confirmation that existing containers kept their identity, state and restart count. One verification job permits the existing bounded retry and counts toward the eight-job daily limit. Browser traces and video are disabled for this operator verification; the provider key never enters its browser environment. The installer records failures in `/etc/reprolab/install-status.json` and keeps reports private under `/opt/reprolab/reports/`. TCP 80 and 443 must be allowed by the Vultr firewall for automatic TLS. Ubuntu 26.10 support must be confirmed by those checks on the actual host; local syntax checks alone do not establish compatibility.
 
 The controller serves the interface and `/api/*` together. It accepts only supported fixture IDs, has a four-job queue, one repair worker and an atomic daily budget (default eight jobs). Each job is read using an unguessable capability token; only its hash is stored. A restart marks pending jobs interrupted and starts no automatic paid retries. An independent timer removes expired containers owned by that deployment.
 
@@ -67,6 +87,8 @@ Passing 20 cases is finite test evidence, not proof for every input. The current
 
 ## Verification status
 
-The [full verification run](https://github.com/NSEVEjk0/reprolab/actions/runs/41934392742) passed: evaluator/admission tests, real gVisor execution of all three failing originals and reference repairs, containment/timeout/output probes, and desktop/mobile browser verification. The checked example bundles contain those real reference executions. A live Vultr host and inference key remain needed for the organizer-specific end-to-end deployment.
+The [full verification run](https://github.com/NSEVEjk0/reprolab/actions/runs/41950253410) passed: evaluator/admission tests, real gVisor execution of all three failing originals and reference repairs, containment/timeout/output probes, and desktop/mobile browser verification. The checked example bundles contain those real reference executions. The separately completed Vultr deployment check includes genuine inference, all 20 cases for its live repair, fresh replay and host preservation. These checks are not a security audit.
+
+See [submission and demo preparation](SUBMISSION.md) for the required recording, slides, honest product scope and remaining entry steps.
 
 MIT-licensed app. gVisor and the Python image retain their upstream licenses.

@@ -1,0 +1,31 @@
+[Unit]
+Description=ReproLab HTTPS frontend
+Documentation=https://caddyserver.com/docs/
+After=network-online.target reprolab.service
+Requires=network-online.target reprolab.service
+
+[Service]
+Type=notify
+User=caddy
+Group=caddy
+ExecStart=/usr/bin/caddy run --config /etc/caddy/reprolab.Caddyfile --adapter caddyfile
+Environment=XDG_DATA_HOME=/var/lib/reprolab-caddy
+Environment=XDG_CONFIG_HOME=/var/lib/reprolab-caddy
+StateDirectory=reprolab-caddy
+StateDirectoryMode=0700
+NoNewPrivileges=true
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/reprolab-caddy
+LimitNOFILE=65536
+MemoryMax=192M
+TasksMax=128
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=5s
+
+[Install]
+WantedBy=multi-user.target
