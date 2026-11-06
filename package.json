@@ -7,6 +7,7 @@
     "test": "python3 -m unittest tests.test_unit tests.test_deploy tests.test_host tests.test_runtime_bundle -v",
     "test:integration": "python3 -m unittest tests.test_integration -v",
     "test:browser": "playwright test",
+    "test:browser-live": "node scripts/record-demo.mjs",
     "check:web": "node --check web/app.js"
   },
   "devDependencies": {"@playwright/test": "1.63.0"},

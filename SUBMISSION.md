@@ -10,27 +10,27 @@ Both the website and controller run on [Vultr](https://139.84.249.47.sslip.io). 
 
 - Public [repository](https://github.com/NSEVEjk0/reprolab) with setup, architecture, actual Vultr services and limitations in the README.
 - Working public Vultr demo, with its access code provided separately to reviewers.
-- Recorded **MP4 or MOV** demo showing one containment moment.
+- Recorded **MP4** demo: [47.88-second actual live repair](presentation/reprolab-demo.mp4), with an independently checked sandbox policy and confirmed removal of both actual gVisor sandboxes. [Live evidence](presentation/reprolab-live-evidence.json); [recording fingerprint](presentation/recording.json).
 - **PDF slides** covering the problem, workflow, architecture, evidence and limitations: [download the four-slide PDF](presentation/reprolab-slides.pdf). Its source is [presentation/slides.html](presentation/slides.html); `python3 scripts/export-slides.py` reproduces the PDF without downloads.
 - Genuine human LabLab registration/submission. The published event phase ends 8 November; the precise submission-form cutoff has not been verified, so aim to submit on 7 November.
 
 Sources: [Vultr challenge](https://lablab.ai/ai-hackathons/vultr-hackathon), [LabLab submission requirements](https://lablab.ai/hackathon-rules). Optional Vultr Community promotion is not needed for judging and is not being posted.
 
-## Required recording: 55 seconds maximum
+## Completed recording: 47.88 seconds
 
-Record one genuine Vultr repair. Use the already connected deployment; the browser never needs the inference provider key. Do not replace the live run with a reference patch.
+The recording used one genuine Vultr rounding repair on the connected deployment. The original failed 12 of 20 independent cases; the candidate passed all 20. The downloaded canonical evidence and hash agree. No candidate code ran locally, no fixture replaced live inference, and the recorder submitted no automatic second job. Exported frames and the measured MP4 duration were inspected before publication.
 
 | Time | Show | Explain |
 | --- | --- | --- |
 | 0–7 s | Broken discount-rounding fixture on the Vultr site | A plausible repair can still be wrong. |
-| 7–20 s | Actual live repair request and original failing checks | The controller reproduces the bug before asking Vultr for a repair. |
-| 20–33 s | Passing candidate checks and containment evidence | Candidate execution has no network, a read-only root and fixed resource limits in gVisor. Show the real denied-network or timeout probe using dummy data. |
-| 33–45 s | Confirmed teardown, exact candidate and evidence download | Success requires independent answers and confirmed cleanup. |
-| 45–55 s | Fresh replay result and repository | The first scope is three Python fixtures. Evidence integrity is not hardware attestation. |
+| 7–19 s | Actual live request and original/candidate check totals | Vultr inference proposed the repair; the independent evaluator accepted it. |
+| 19–26 s | Actual sandbox policy evidence | gVisor, no network, a read-only root and nonroot execution. |
+| 26–40 s | Exact candidate, evidence download and confirmed removal | The recorded baseline/candidate sandboxes were removed; unconfirmed cleanup cannot pass. |
+| 40–48 s | Reproduction command and repository | The first scope is three Python fixtures. Integrity hashes are not host attestations. |
 
-Prepare a real containment probe and fresh replay before recording. Edit waiting time only; keep the actual failure, result and cleanup visible. Keep the final video under 60 seconds. No optional promotional video is needed.
+The recorded containment moment is lifecycle verification and confirmed sandbox removal, backed by the actual run's independent policy checks. Deliberate denied-network/timeout probes passed infrastructure verification, and a fresh replay passed the earlier operator check; those separate executions are not shown in this recording. No optional promotional video is needed.
 
-The prepared `scripts/record-demo.mjs` runs on the ordinary Vultr host with Playwright and system FFmpeg available. From the repository, run `REPROLAB_ROOT=/opt/reprolab node scripts/record-demo.mjs`. It reads the existing private demo access file, starts one real repair, records its actual containment-policy/cleanup evidence and exports a captioned MP4 capped at 55 seconds plus the evidence. It edits idle waiting and sends no automatic second job. Its execution is pending because the coding session blocks Chromium; do not claim the video has been produced until that command succeeds. The extra deliberate probe/replay shots can be recorded separately and trimmed into the same one-minute limit if needed.
+`npm run test:browser-live` uses the declared Playwright package and an existing FFmpeg/libx264 installation to check and record the actual public workflow. It reads `/etc/reprolab/demo-access.txt` on the Vultr host or the existing private `.local/recording-access.txt` in this workspace; `REPROLAB_ACCESS_FILE` selects an explicit private file. It never reads the inference provider key. Each intentional recording run starts one live repair and counts toward the daily limit. The completed public artifacts are in `presentation/`; private raw recordings stay under `reports/submission/`.
 
 ## Announcement draft
 

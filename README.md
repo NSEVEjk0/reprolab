@@ -12,6 +12,8 @@ An AI repair can print a success message while leaving the bug in place, or run 
 
 Open [ReproLab on Vultr](https://139.84.249.47.sslip.io). Both the website and controller run on the Vultr VM; model calls use Vultr Serverless Inference. A demo access code is required to start a job and is supplied separately by the operator.
 
+Watch the [47.88-second live demonstration](presentation/reprolab-demo.mp4), inspect its [actual evidence](presentation/reprolab-live-evidence.json), or download the required [PDF slides](presentation/reprolab-slides.pdf). The recorded rounding repair reproduced 12 failing original cases and passed all 20 independent candidate cases. The video shows the actual sandbox policy and confirmed removal of both gVisor sandboxes; idle waiting was edited. No candidate code ran on the recording machine.
+
 The deployed application source is [b5cbdb9](https://github.com/NSEVEjk0/reprolab/tree/b5cbdb9ad95816d26bf56183d0e9972acbd5e469). The completed host verification exercised a real repair passing all 20 independent cases, evidence integrity, a fresh sandbox replay and cleanup. The existing OptimAI crawler was preserved. The earlier [reference preview](https://reprolab-ckay.vercel.app) remains a disclosed model-free example.
 
 Choose a failure, start a live repair and inspect the original failures, candidate results, exact source and image fingerprints, and confirmed removal of each sandbox. Download the evidence and replay the candidate yourself.
@@ -89,6 +91,6 @@ Passing 20 cases is finite test evidence, not proof for every input. The current
 
 The [full verification run](https://github.com/NSEVEjk0/reprolab/actions/runs/41950253410) passed: evaluator/admission tests, real gVisor execution of all three failing originals and reference repairs, containment/timeout/output probes, and desktop/mobile browser verification. The checked example bundles contain those real reference executions. The separately completed Vultr deployment check includes genuine inference, all 20 cases for its live repair, fresh replay and host preservation. These checks are not a security audit.
 
-See [submission and demo preparation](SUBMISSION.md) for the required recording, slides, honest product scope and remaining entry steps.
+See [submission and demo preparation](SUBMISSION.md) for the completed recording, slides, honest product scope and remaining human entry steps.
 
 MIT-licensed app. gVisor and the Python image retain their upstream licenses.

@@ -1,0 +1,16 @@
+{
+  "schema": "reprolab-recording-v1",
+  "origin": "https://139.84.249.47.sslip.io",
+  "fixture": "rounding",
+  "liveEvidenceSHA256": "0744b2bde45f918e1bdccd646984a15f5802203880792ab62171cf970cb2ac55",
+  "videoSHA256": "25b11417b2f4d3d5e190e2a6a4d20ddfc21fc4f1e28614e770d1de8073d74fce",
+  "editedIdleWaiting": true,
+  "maximumDurationSeconds": 55,
+  "selectedSeconds": 47.875,
+  "durationSeconds": 47.88,
+  "video": "reprolab-demo.mp4",
+  "automaticJobRetries": 0,
+  "liveRepairsStarted": 1,
+  "containmentMoment": "Independent recorded sandbox policy and confirmed removal of the baseline/candidate gVisor sandboxes",
+  "candidateExecutedLocally": false
+}
