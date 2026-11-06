@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ReproLab · Watch the live repair</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f4f5fc;color:#19243b;font:18px/1.6 system-ui,sans-serif}main{max-width:1060px;margin:auto;padding:36px 24px 64px}a{color:#343cd9;text-underline-offset:4px}h1{font-size:clamp(32px,5vw,52px);line-height:1.15;margin:24px 0 16px}video{display:block;width:100%;height:auto;background:#19243b;border-radius:12px;margin:24px 0 16px}.note{padding:16px 20px;border:1px solid #cdd1eb;border-radius:10px;background:#ebedf9}.links,.player-actions{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:18px 0}button{font:inherit;background:#343cd9;color:white;border:0;border-radius:8px;padding:12px 22px;cursor:pointer}.detail{font-size:16px}.error{color:#942e2e}li{margin:8px 0}h2{font-size:26px;margin-top:32px}
+  </style>
+</head>
+<body>
+<main>
+  <a href="https://139.84.249.47.sslip.io">Open the live Vultr app ↗</a>
+  <h1>An AI repair, checked outside the model.</h1>
+  <p>ReproLab reproduces a Python bug, asks Vultr inference for a repair, runs the code in a fresh gVisor sandbox, and checks independent answers before accepting it.</p>
+  <p class="note"><strong>Recording of the actual Vultr application.</strong> This page hosts the narrated video. The working repair application runs at <a href="https://139.84.249.47.sslip.io">139.84.249.47.sslip.io</a>.</p>
+  <video id="demo-video" controls playsinline preload="metadata" width="1440" height="1000" poster="/demo/poster.jpg" aria-label="ReproLab narrated live repair demonstration">
+    <source src="/demo/reprolab-demo.mp4?v=narrated" type="video/mp4">
+    <track kind="captions" src="/demo/captions.vtt" srclang="en" label="English narration">
+    <a href="/demo/reprolab-demo.mp4?v=narrated">Open the demonstration</a>
+  </video>
+  <div class="player-actions"><button id="play-demo" type="button">Play narrated demo</button><a href="/demo/reprolab-demo.mp4?v=narrated">Open video directly ↗</a></div>
+  <p id="video-error" class="error" role="status" hidden></p>
+  <div class="links"><a href="/demo/reprolab-demo.mp4?v=narrated" download>Download MP4</a><a href="/demo/reprolab-slides.pdf">PDF slides</a><a href="/demo/reprolab-live-evidence.json">Actual repair evidence</a><a href="/demo/recording.json">Recording verification</a><a href="https://github.com/NSEVEjk0/reprolab">Source code ↗</a></div>
+  <h2>What this run verified</h2>
+  <ul>
+    <li>The original discount-rounding implementation failed 12 independent cases.</li>
+    <li>The model-generated candidate passed all 20 independent cases.</li>
+    <li>Both gVisor sandboxes had the recorded policy checks and confirmed removal.</li>
+  </ul>
+  <p class="detail">The recording edits idle waiting. No candidate code ran on the recording machine. The first version supports three maintained Python fixtures; hashes bind recorded bytes and do not attest the host. Narration is synthetic; English captions are available in the player.</p>
+</main>
+<script>
+  const video=document.getElementById('demo-video'),button=document.getElementById('play-demo'),message=document.getElementById('video-error');
+  const failed=()=>{message.hidden=false;message.textContent='The video could not load. Use “Open video directly” above to watch or download the MP4.';};
+  button.addEventListener('click',async()=>{try{if(!video.paused){video.pause();return;}video.muted=false;await video.play();message.hidden=true;}catch{failed();}});
+  video.addEventListener('error',failed);
+  video.addEventListener('playing',()=>{button.textContent='Pause demo';});
+  video.addEventListener('pause',()=>{button.textContent='Play narrated demo';});
+</script>
+</body>
+</html>

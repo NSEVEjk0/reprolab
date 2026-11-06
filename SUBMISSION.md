@@ -10,7 +10,7 @@ Both the website and controller run on [Vultr](https://139.84.249.47.sslip.io). 
 
 - Public [repository](https://github.com/NSEVEjk0/reprolab) with setup, architecture, actual Vultr services and limitations in the README.
 - Working public Vultr demo, with its access code provided separately to reviewers.
-- Recorded **MP4** demo: [47.88-second actual live repair](presentation/reprolab-demo.mp4), with an independently checked sandbox policy and confirmed removal of both actual gVisor sandboxes. [Live evidence](presentation/reprolab-live-evidence.json); [recording fingerprint](presentation/recording.json).
+- Recorded **MP4** demo: [47.88-second narrated actual live repair](https://reprolab-ckay.vercel.app/demo/), with an independently checked sandbox policy and confirmed removal of both actual gVisor sandboxes. [Live evidence](presentation/reprolab-live-evidence.json); [recording fingerprint](presentation/recording.json).
 - **PDF slides** covering the problem, workflow, architecture, evidence and limitations: [download the four-slide PDF](presentation/reprolab-slides.pdf). Its source is [presentation/slides.html](presentation/slides.html); `python3 scripts/export-slides.py` reproduces the PDF without downloads.
 - Genuine human LabLab registration/submission. The published event phase ends 8 November; the precise submission-form cutoff has not been verified, so aim to submit on 7 November.
 

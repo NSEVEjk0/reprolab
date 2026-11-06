@@ -1,0 +1,22 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.000
+ReproLab checks AI generated Python repairs, using independent tests and a fresh sandbox for every execution.
+
+00:00:07.000 --> 00:00:12.000
+The real Vultr inference service proposes a repair for this discount rounding bug.
+
+00:00:12.000 --> 00:00:19.000
+The original fails twelve cases. The candidate passes all twenty independent tests. The model does not decide acceptance.
+
+00:00:19.000 --> 00:00:26.000
+This actual execution used gVisor, no network, a read only root, a nonroot user, and resource limits.
+
+00:00:26.000 --> 00:00:33.000
+Download the exact candidate and its evidence. The checks and source fingerprints travel with the repair.
+
+00:00:33.000 --> 00:00:40.000
+Both actual sandbox containers were removed. If cleanup is unconfirmed, ReproLab cannot report a verified repair.
+
+00:00:40.000 --> 00:00:47.875
+This first version covers three Python fixtures. Recorded hashes bind the evidence, but do not attest the host.
